@@ -1,0 +1,30 @@
+services:
+  rag:
+    build: .
+    volumes:
+      - chroma_data:/app/db      # ChromaDB persistence
+      - ./data:/app/data         # input PDFs
+    environment:
+      - CHROMA_PATH=/app/db
+    depends_on:
+      - ollama
+    profiles:
+      - cli
+
+  ollama:
+    image: ollama/ollama
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "ollama serve & sleep 5 && ollama pull llama3.1:8b && wait",
+      ]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+  ollama_models:
