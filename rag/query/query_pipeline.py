@@ -1,7 +1,7 @@
 from rag.ingestion.vector_db import VectorDB
 from rag.ingestion.text_embedder import TextEmbedder
 from rag.exceptions import QueryError, CollectionEmptyError, EmbeddingError, LLMError
-from rag.query.agent import  prompt_agent, query_ollama_http
+from rag.query.agent import  prompt_agent
 
 class QueryPipeline:
     def __init__(self):
@@ -23,17 +23,16 @@ class QueryPipeline:
         except Exception as e:
             raise QueryError(f"failed to retrieve context {e}") from e
 
-    def prompt_agent(self, query, context) -> str:
+    def prompt_agent(self, query, context):
         try:
             response = prompt_agent(query, context)
-            return response.response
+            return response.response, context
         except LLMError as llm_error:
-            print(llm_error)
             raise llm_error
         except Exception as e:
             raise LLMError(f"Failed to prompt the llm agent {e}") from e
 
-    def query(self, query) -> str:
+    def query(self, query):
         self.verify_query(query)
 
         try:

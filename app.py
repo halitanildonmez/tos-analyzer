@@ -30,10 +30,12 @@ st.subheader("Ask a question")
 
 query = st.text_input("Example: Can they terminate my account?")
 
-if st.button("Get Answer"):
-    if query:
-        answer = query_pipeline.query(query)
-        st.write(answer)
+if query:
+    with st.spinner("Processing", show_time=True):
+        answer, context = query_pipeline.query(query)
+        st.success(answer)
+        st.subheader("Citations")
+        st.write(context)
 
 # ---- Risk Analysis ----
 st.subheader("Risk Analysis")
@@ -49,5 +51,8 @@ Analyze the Terms of Service and identify:
 Return a structured summary with risk levels (Low/Medium/High).
 """
 if st.button("Analyze Risks"):
-    #result = run_risk_analysis()
-    st.write("result")
+    with st.spinner("Checking risks", show_time=True):
+        result, risk_context = query_pipeline.query(RISK_PROMPT)
+        st.success(result)
+        st.subheader("Citations")
+        st.write(risk_context)

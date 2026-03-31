@@ -9,9 +9,6 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN curl -fsSL https://ollama.com/install.sh | sh
-
 COPY . .
 
-#ollama serve & sleep 5 && ollama pull phi &&
-CMD sh -c "ollama serve & sleep 5 && ollama pull phi && streamlit run app.py --server.port=8501 --server.address=0.0.0.0 --logger.level=debug"
+CMD sh -c "streamlit run app.py --server.port=8501 --server.address=0.0.0.0 --logger.level=debug"

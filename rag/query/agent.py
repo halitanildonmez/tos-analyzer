@@ -2,6 +2,8 @@ from ollama import chat
 import requests
 import config
 import logging
+
+from config import OLLAMA_HOST
 from rag.exceptions import LLMError
 from pydantic import BaseModel
 import requests
@@ -34,7 +36,7 @@ def prompt_agent(question: str, context: str,  max_retries: int = config.NUM_RET
     error_message = ""
     for _ in range(max_retries):
         try:
-            logger.info(f"Prompting for {question}")
+            logger.info(f"Prompting for {question} at endpoint {OLLAMA_HOST}")
             prompt = generate_prompt(question, context, error_message)
             response = chat(model=config.OLLAMA_MODEL, messages=[
                 {
