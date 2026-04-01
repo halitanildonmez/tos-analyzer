@@ -1,5 +1,7 @@
 # Terms of Service Risk Analyzer (RAG-based)
 
+<img src="demo.gif" width="600" />
+
 ## Overview
 
 Most users accept Terms of Service (ToS) without reading or understanding the risks.
@@ -11,6 +13,7 @@ This project is a **Retrieval-Augmented Generation (RAG)** application that allo
 * Receive grounded, context-based answers
 
 Aim of this is ease and simplicity of use. It is running offline without a need for an API key.
+I had to use a smaller model which did not give better results but for the demo purposes I will leave it as an improvement.
 
 ---
 
