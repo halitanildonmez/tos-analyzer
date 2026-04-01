@@ -71,28 +71,6 @@ The system is intentionally minimal:
 
 ---
 
-## Evaluation
-
-A lightweight evaluation approach is implemented:
-
-* predefined test questions
-* expected keywords
-* simple matching-based scoring
-
-This validates:
-
-* answer relevance
-* grounding in context
-
-Example:
-
-```
-Question: Can they terminate my account?
-Expected keywords: ["terminate", "suspend"]
-```
-
----
-
 ## Example Output
 
 ### Question
