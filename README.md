@@ -9,9 +9,8 @@ This project is a **Retrieval-Augmented Generation (RAG)** application that allo
 * Upload Terms of Service documents
 * Ask natural language questions
 * Receive grounded, context-based answers
-* Generate a structured **risk analysis summary**
 
-The system is designed to demonstrate **practical AI engineering skills under real-world constraints**, focusing on simplicity, reliability, and usability.
+Aim of this is ease and simplicity of use. It is running offline without a need for an API key.
 
 ---
 
@@ -24,17 +23,6 @@ The system is designed to demonstrate **practical AI engineering skills under re
   * "Can they terminate my account?"
   * "What data do they collect?"
 * Answers are generated **only from the uploaded document**
-
-### 2. Risk Analysis (Key Feature)
-
-Automatically analyzes the document and returns:
-
-* Data Collection Risk (Low / Medium / High)
-* Account Termination Risk
-* Liability Risk
-* Arbitration Clause (Yes / No)
-
-This simulates a real-world AI use case: **helping users understand legal risks quickly**
 
 ---
 
@@ -57,54 +45,20 @@ User Input → Retriever → Vector Database → Context → LLM → Response
 
 * Python
 * Streamlit (UI)
-* OpenAI API (LLM + embeddings)
+* Ollama (LLM)
+* HuggingFace (Encodings)
 * Chroma (vector database)
-
----
-
-## Project Structure
-
-```
-tos-rag-analyzer/
-│
-├── app.py                  # Streamlit UI
-├── pipeline.py             # Core RAG pipeline
-│
-├── rag/
-│   ├── loader.py
-│   ├── chunker.py
-│   ├── embedder.py
-│   ├── vectorstore.py
-│   ├── retriever.py
-│   └── generator.py
-│
-├── evaluation/
-│   └── eval.py             # Lightweight evaluation
-│
-├── data/                   # Sample ToS documents
-├── README.md
-├── requirements.txt
-└── .env
-```
 
 ---
 
 ## Design Decisions
 
-### 1. API-based models instead of local LLMs
+### 1. Local LLMs over API
 
-Local models were avoided due to hardware constraints.
-Using APIs ensures:
+This decision was made for learning purposes. I did not want to pay for experimentation. 
+Therefore this system is "offline" and the models running are not exposed to internet
 
-* stability
-* faster iteration
-* lower setup complexity
-
-### 2. Lightweight evaluation instead of heavy frameworks
-
-Instead of using complex evaluation tools, a simple keyword-based evaluation approach is used to validate outputs.
-
-### 3. Simplicity over overengineering
+### 2. Simplicity over overengineering
 
 The system is intentionally minimal:
 
@@ -148,57 +102,64 @@ Expected keywords: ["terminate", "suspend"]
 
 ---
 
-### Risk Analysis
-
-```
-Data Collection Risk: High
-Account Termination Risk: Medium
-Liability Risk: High
-Arbitration Clause: Yes
-```
-
----
 
 ## How to Run
 
-### 1. Install dependencies
+### 1. Via Docker
+
+Just type: 
 
 ```
-pip install -r requirements.txt
+docker-compose up --build
 ```
 
-### 2. Add API key
+This will start the application. You can navigate to http://localhost:8501 
 
-Create a `.env` file:
+### 2. Locally
 
-```
-OPENAI_API_KEY=your_key_here
-```
-
-### 3. Run the app
-
+First start ollama. It should be running under http://localhost:11434
+Then you can just run the command:
 ```
 streamlit run app.py
 ```
+and frontend will send requests to ollama backend
 
 ---
 
 ## Limitations
 
-* Works best with clean text (TXT input)
 * No advanced reranking or hybrid search
-* Evaluation is heuristic-based (not exhaustive)
+* Model is too small and larger models causes crashes
 * Not optimized for large-scale datasets
+
+## Small Local Models
+
+The application is using phi, which is a small Ollama model.This is due to restrictions of my own hardware and 
+not wanting to pay for model interactions (since this is a learning attempt). 
+
+Even with a small model, average response time is around 40 seconds and as expected, results sometimes vary. This 
+is expected since the aim is to create the system. 
+
+## No Evaluation (yet)
+
+Due to using a small model locally, this also limited my ability to use evaluation frameworks such as Ragas. I have tried
+adding it however it proved too much for my computer to handle. Even with small number of iterations (generating a test
+dataset of 10 question/answer pairs, I had to kill the instance due to CPU usage). 
+
+I tried to implement it myself by asking LLM to evaluate it based on responses I expected, however that also yielded
+the same results. 
+
+Eventually I will probably be able to use an external GPU or end up paying for an LLM but for the purposes of this 
+project, I believe this will be enough for now.
 
 ---
 
 ## Future Improvements
 
-* PDF parsing improvements
-* citation highlighting in answers
 * better evaluation metrics
 * hybrid search (keyword + semantic)
 * deployment as a web service (API)
+* risk analysis
 
 ---
 
@@ -208,7 +169,6 @@ This project demonstrates:
 
 * practical implementation of RAG systems
 * ability to design under constraints
-* product-oriented thinking (risk analysis feature)
 * understanding of LLM limitations (hallucination control via retrieval)
 
 ---

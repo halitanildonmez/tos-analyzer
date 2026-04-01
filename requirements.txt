@@ -1,0 +1,10 @@
+pymupdf
+chromadb
+ollama
+requests
+pathvalidate
+langchain-text-splitters
+sentence_transformers
+streamlit
+torchvision
+pydantic
